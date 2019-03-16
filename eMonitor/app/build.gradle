@@ -1,17 +1,18 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
 
     defaultConfig {
         applicationId "com.amap.monitor"
-        minSdkVersion 15
-        targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion 16
+        targetSdkVersion 24
+        versionCode 5
+        versionName "2.0"
         multiDexEnabled true
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -19,10 +20,23 @@ android {
         }
     }
 }
-
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:recyclerview-v7:24.0.0'
+    compile 'com.android.support:support-annotations:24.2.0'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    //compile project(':alphaview')
+    //compile group: 'com.lzy.widget', name: 'view-core', version: '0.2.2'
     //compile files('libs/AMap_3DMap_V3.3.1_20160419.jar')
+    //compile files('libs/view-core-0.2.2.aar')compile files('libs/view-core-0.2.2.aar')
+    compile(name:'view-core-0.2.2', ext:'aar')
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+    /*权限获取*/
+    compile 'com.yanzhenjie:permission:1.0.5'
 }

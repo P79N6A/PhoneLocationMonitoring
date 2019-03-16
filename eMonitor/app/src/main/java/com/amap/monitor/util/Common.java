@@ -12,10 +12,14 @@ import android.util.Log;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.monitor.activity.DrawTraceActivity;
+import com.autonavi.amap.mapcore.Convert;
 
 public class Common {
     public static final String SERVER_URL = "http://www.cqycg.com";
     public static final String LOCATION_DATA_URL = SERVER_URL+"/monitor/location.php?act=login";
+    public static final String VersionUrl = "http://www.cqycg.com//monitor/location.php?act=version";
+
+    public static final String apkurl = "http://www.cqycg.com/app/cqycglocation.apk";
 
     //子线程执行代码
     public static void runInChildThread(Runnable runnable){
@@ -59,23 +63,54 @@ public class Common {
     }
 
     //获取用户ID
-    public static String getEmpId(Context mContext){
-        SharedPreferences sp = mContext.getSharedPreferences("userinfo", mContext.MODE_PRIVATE); //
-        return sp.getString("empid", ""); //获取sp里面存储的数据
+    public static Integer getEmpId(Context mContext){
+        int empid = 0;
+        try {
+            SharedPreferences sp = mContext.getSharedPreferences("userinfo", mContext.MODE_PRIVATE); //
+            empid = Integer.valueOf(sp.getString("empid", "")); //获取sp里面存储的数据
+        }catch (Exception e){
+
+        }
+        return empid;
     }
 
+    //获取是否为管理员
+    public static boolean getIsAdmin(Context mContext){
+        SharedPreferences sp = mContext.getSharedPreferences("userinfo", mContext.MODE_PRIVATE); //
+        String isadmin = sp.getString("isadmin", ""); //获取sp里面存储的数据
+        if(!isadmin.equals("") && Integer.valueOf(isadmin) == 1){
+            return true;
+        }else {
+            return false;
+        }
+    }
+    //获取是否为管理员
+    public static boolean clearEmployInfo(Context mContext){
+        SharedPreferences sp = mContext.getSharedPreferences("userinfo", mContext.MODE_PRIVATE); //
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("USERNAME", "");
+        editor.putString("PASSWORD","");
+        editor.putString("empid","0");
+        editor.putString("isadmin","0");
+        editor.commit();
 
+        return true;
+    }
     /**
      * 设置Android6.0的权限申请
      */
-    private void setPermissions(Activity mContext) {
+    public static void setPermissions(Activity mContext) {
         final String[] PERMISSION = new String[]{
-                Manifest.permission.READ_CONTACTS,// 写入权限
-                Manifest.permission.READ_EXTERNAL_STORAGE,  //读取权限
-                Manifest.permission.ACCESS_COARSE_LOCATION,        //读取设备信息
-                Manifest.permission.ACCESS_FINE_LOCATION        //读取设备信息
+                Manifest.permission.READ_CONTACTS,          // 读取联系人
+                Manifest.permission.ACCESS_COARSE_LOCATION, //用于进行网络定位
+                Manifest.permission.ACCESS_FINE_LOCATION,   //用于访问GPS定位
+                Manifest.permission.WRITE_EXTERNAL_STORAGE, //写入外部存储
+                Manifest.permission.READ_EXTERNAL_STORAGE,  //读取外部存储
+                Manifest.permission.READ_PHONE_STATE        //读取电话状态
         };
-        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+          ||ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+          ||ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED      ) {
             //Android 6.0申请权限
             ActivityCompat.requestPermissions(mContext,PERMISSION,1);
         }else{

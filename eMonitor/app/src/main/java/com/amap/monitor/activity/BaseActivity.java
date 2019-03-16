@@ -1,6 +1,7 @@
 package com.amap.monitor.activity;
 
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,7 @@ import com.amap.monitor.R;
 /**
  * Created by Administrator on 2016/5/4.
  */
-public class BaseActivity extends FragmentActivity {
+public class BaseActivity extends AppCompatActivity {
 
 
 

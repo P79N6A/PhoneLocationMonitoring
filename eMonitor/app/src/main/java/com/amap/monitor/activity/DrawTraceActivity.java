@@ -87,13 +87,12 @@ public class DrawTraceActivity extends BaseActivity implements LocationSource, A
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_draw_trace);
-        String mEmpId = Common.getEmpId(this);
-        if(mEmpId.equals("")){
+        if(Common.getEmpId(this) == 0){
             Intent intent = new Intent(DrawTraceActivity.this, LoginActivity.class);
             startActivity(intent);
         }
         mapView = (MapView) findViewById(R.id.map);
-        //mapView.onCreate(savedInstanceState);// 此方法必须重写
+        mapView.onCreate(savedInstanceState);// 此方法必须重写
         mSavedInstanceState = savedInstanceState;
     }
 
